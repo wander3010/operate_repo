@@ -1,0 +1,53 @@
+pipeline {
+      agent any
+      stages {
+          stage('21051247 Stage One') {
+          steps {
+            echo '21051247 Start of Pipeline'
+          }
+          }
+          stage('21051247 Stage Two') {
+          steps {
+            input('Push changes to Production?')
+          }
+          }
+          stage('21051247 Stage Three') {
+          when {
+                not {
+                    branch "Stage 3 Not Completed - 21051247"
+                }
+          }
+          steps {
+                 sh '''#!/bin/bash
+                 targets=websvr_21051247;
+                 locate_script='/21051247/script_dir/operate_repo/21051247_script';
+                 docker cp $locate_script $targets://$locate_script;
+                 bolt script run $locate_script -t $targets -u clientadm -p user123 --no-host-key-check --run-as root;
+                 '''
+                 echo "Stage 3 Completed - 21051247"
+          }
+          }
+          stage('21051247 Stage Four') {
+          when {
+                not {
+                    branch "Production website tested not working"
+                }
+          }
+          steps {
+                 sh '''#!/bin/bash
+                 targets=websvr_21051247-2;
+                 locate_script='/21051247/script_dir/operate_repo/21051247_script';
+                 docker cp $locate_script $targets://$locate_script;
+                 bolt script run $locate_script -t $targets -u clientadm -p user123 --no-host-key-check --run-as root;
+                 '''
+                 echo "Production website tested working"
+          }
+          }
+          }
+          stage('21051247 Stage Five') {
+          steps {
+            echo 'Production website is updated successfully'
+          }
+          }
+      }
+}
