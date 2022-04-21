@@ -6,5 +6,5 @@ puppet resource file /21051247/clone ensure=absent force=true
 puppet resource file /21051247 ensure=directory
 puppet resource file /21051247/clone ensure=directory
 cd /21051247/clone
-git clone https://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@github.com/wander3010/operate_repo.git
+git clone https://github.com/wander3010/operate_repo.git
 cp -p /21051247/clone/operate_repo/index.html /var/www/html
